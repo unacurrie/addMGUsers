@@ -1,6 +1,6 @@
 # start from new connection and if no connection exists just SilentlyContinue
-# Disconnect-MgGraph -ErrorAction SilentlyContinue
-#
+Disconnect-MgGraph -ErrorAction SilentlyContinue
+
 Connect-MgGraph
 
 function createPW {
@@ -21,13 +21,15 @@ function createUsers {
         continue
       }
     }
+    $username = ($user.name.Replace(' ', ''))
+    $firstName = ($user.name -split ' ', 0)[0]
     New-MgUser `
       -DisplayName $user.name `
       -PasswordProfile $userPW `
       -AccountEnabled `
-      -MailNickname ($user.name -split ' ', 0)[0] `
-      -Mail "$($user.name.Replace(' ', ''))@blanknessplc.onmicrosoft.com" `
-      -UserPrincipalName "$($user.name.Replace(' ', ''))@blanknessplc.onmicrosoft.com" `
+      -MailNickname $firstName `
+      -Mail "$username@blanknessplc.onmicrosoft.com" `
+      -UserPrincipalName "$username@blanknessplc.onmicrosoft.com" `
       -UsageLocation GB
   }
 }
